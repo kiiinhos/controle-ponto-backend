@@ -1,4 +1,3 @@
-// user.repository.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,11 +11,21 @@ export class UserRepository {
   ) {}
 
   async getUserByUserCode(userCode: string): Promise<UserEntity> {
-    return await this.userRepository.findOne({ where: { userCode } });
+    const user = await this.userRepository.findOne({ where: { userCode } });
+    console.log('Retorno da busca por usuário:', user);
+    return user;
   }
 
   async register(user: Partial<UserEntity>): Promise<UserEntity> {
-    const newUser = this.userRepository.create(user);
-    return await this.userRepository.save(newUser);
+    const existingUser = await this.userRepository.findOne({
+      where: { userCode: user.userCode },
+    });
+    if (!existingUser) {
+      const newUser = this.userRepository.create(user);
+      return await this.userRepository.save(newUser);
+    } else {
+      console.log('Usuário já existe:', existingUser);
+      return existingUser;
+    }
   }
 }

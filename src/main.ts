@@ -5,6 +5,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('check-point');
 
-  await app.listen(3000);
+  await app.listen(3500);
 }
 bootstrap();
