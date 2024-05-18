@@ -13,7 +13,7 @@ RUN npm install
 # Copie o restante do código da aplicação
 COPY . .
 
-# Compile o projeto (caso esteja usando TypeScript)
+# Compile o projeto
 RUN npm run build
 
 # Exponha a porta que a aplicação irá rodar
