@@ -28,7 +28,7 @@ import { UserHistoryEntity } from './registers/entities/user-history.entity';
           UserExitEntity,
           UserHistoryEntity,
         ],
-        synchronize: true, // Apenas para ambiente de desenvolvimento
+        synchronize: true,
         ssl: configService.get<boolean>('DB_SSL')
           ? { rejectUnauthorized: false }
           : false,
