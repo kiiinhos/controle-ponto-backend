@@ -22,13 +22,15 @@ export class RegistersController {
 
   @Post('entry')
   @HttpCode(201)
-  async registerEntry(@Body('userCode') userCode: string) {
+  async registerEntry(@Body() body: { userCode: string }) {
+    const { userCode } = body;
     return await this.registersService.registryEntry(userCode);
   }
 
   @Post('exit')
   @HttpCode(201)
-  async registerExit(@Body('userCode') userCode: string) {
+  async registerExit(@Body() body: { userCode: string }) {
+    const { userCode } = body;
     return await this.registersService.registryExit(userCode);
   }
 }

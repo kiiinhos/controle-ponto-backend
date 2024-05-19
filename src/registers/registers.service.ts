@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntryEntity } from './entities/user-entry.entity';
 import { UserExitEntity } from './entities/user-exit.entity';
-import { UserHistoryEntity } from './entities/user-history.entity';
 import { UserEntry, UserExit } from './registers.interface';
+import { getCurrentDateAndTimeInSaoPaulo } from '../utils/dateUtils';
 
 @Injectable()
 export class RegistersService {
@@ -13,8 +13,6 @@ export class RegistersService {
     private readonly userEntryRepository: Repository<UserEntryEntity>,
     @InjectRepository(UserExitEntity)
     private readonly userExitRepository: Repository<UserExitEntity>,
-    @InjectRepository(UserHistoryEntity)
-    private readonly userHistoryRepository: Repository<UserHistoryEntity>,
   ) {}
 
   async getEntryHistory(userCode: string): Promise<UserEntry[]> {
@@ -38,9 +36,7 @@ export class RegistersService {
   }
 
   async registryEntry(userCode: string) {
-    const now = new Date();
-    const currentDate = now.toISOString().split('T')[0];
-    const currentTime = now.toTimeString().split(' ')[0];
+    const { currentDate, currentTime } = getCurrentDateAndTimeInSaoPaulo();
 
     const entry = this.userEntryRepository.create({
       userCode,
@@ -51,9 +47,7 @@ export class RegistersService {
   }
 
   async registryExit(userCode: string) {
-    const now = new Date();
-    const currentDate = now.toISOString().split('T')[0];
-    const currentTime = now.toTimeString().split(' ')[0];
+    const { currentDate, currentTime } = getCurrentDateAndTimeInSaoPaulo();
 
     const exit = this.userExitRepository.create({
       userCode,
