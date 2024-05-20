@@ -19,4 +19,7 @@ export class UserHistoryEntity {
 
   @Column()
   hourExit: string;
+
+  @Column()
+  workTime: string;
 }

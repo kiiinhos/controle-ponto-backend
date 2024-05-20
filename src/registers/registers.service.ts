@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntryEntity } from './entities/user-entry.entity';
 import { UserExitEntity } from './entities/user-exit.entity';
-import { UserEntry, UserExit } from './registers.interface';
+import { UserHistoryEntity } from './entities/user-history.entity';
+import { UserEntry, UserExit, UserHistory } from './registers.interface';
 import { getCurrentDateAndTimeInSaoPaulo } from '../utils/dateUtils';
+import { calculateWorkTime } from '../utils/timeUtils';
 
 @Injectable()
 export class RegistersService {
@@ -13,6 +15,8 @@ export class RegistersService {
     private readonly userEntryRepository: Repository<UserEntryEntity>,
     @InjectRepository(UserExitEntity)
     private readonly userExitRepository: Repository<UserExitEntity>,
+    @InjectRepository(UserHistoryEntity)
+    private readonly userHistoryRepository: Repository<UserHistoryEntity>,
   ) {}
 
   async getEntryHistory(userCode: string): Promise<UserEntry[]> {
@@ -35,6 +39,10 @@ export class RegistersService {
     }));
   }
 
+  async getUserHistory(userCode: string): Promise<UserHistory[]> {
+    return await this.userHistoryRepository.find({ where: { userCode } });
+  }
+
   async registryEntry(userCode: string) {
     const { currentDate, currentTime } = getCurrentDateAndTimeInSaoPaulo();
 
@@ -54,6 +62,30 @@ export class RegistersService {
       dateExit: currentDate,
       hourExit: currentTime,
     });
+
+    const latestEntry = await this.userEntryRepository.findOne({
+      where: { userCode, dateEntry: currentDate },
+      order: { hourEntry: 'DESC' },
+    });
+
+    if (latestEntry) {
+      const workTime = calculateWorkTime(
+        { dateEntry: latestEntry.dateEntry, hourEntry: latestEntry.hourEntry },
+        { dateExit: exit.dateExit, hourExit: exit.hourExit },
+      );
+
+      const history = this.userHistoryRepository.create({
+        userCode,
+        dateEntry: latestEntry.dateEntry,
+        hourEntry: latestEntry.hourEntry,
+        dateExit: exit.dateExit,
+        hourExit: exit.hourExit,
+        workTime,
+      });
+
+      await this.userHistoryRepository.save(history);
+    }
+
     return await this.userExitRepository.save(exit);
   }
 }

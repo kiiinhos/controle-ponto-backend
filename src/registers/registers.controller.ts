@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { RegistersService } from './registers.service';
-import { UserEntry, UserExit } from './registers.interface';
+import { UserEntry, UserExit, UserHistory } from './registers.interface';
 
 @Controller('registers')
 export class RegistersController {
@@ -18,6 +18,13 @@ export class RegistersController {
     @Param('userCode') userCode: string,
   ): Promise<UserExit[]> {
     return await this.registersService.getExitHistory(userCode);
+  }
+
+  @Get('history/:userCode')
+  async getUserHistory(
+    @Param('userCode') userCode: string,
+  ): Promise<UserHistory[]> {
+    return await this.registersService.getUserHistory(userCode);
   }
 
   @Post('entry')
