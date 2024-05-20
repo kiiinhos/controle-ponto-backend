@@ -66,12 +66,6 @@ Essas instruções permitirão que você obtenha uma cópia do projeto em opera�
    DB_SSL=true
    ```
 
-5. Execute as migrações do banco de dados:
-
-   ```sh
-   npm run typeorm migration:run
-   ```
-
 ## 💻 Executando o Servidor
 
 Para iniciar o servidor em modo de desenvolvimento, utilize o comando:
