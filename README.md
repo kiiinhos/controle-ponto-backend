@@ -10,8 +10,8 @@ Essas instruções permitirão que você obtenha uma cópia do projeto em opera�
 ## Tabela de Conteúdos
 
 1. [Tecnologias Utilizadas](#tecnologias-utilizadas)
-2. [Instalação e Configuração](#instalação-e-configuração)
-3. [Uso](#uso)
+2. [Instalação e Configuração](#instalacao-e-configuração)
+3. [Uso](#executando-o-servidor)
 4. [Estrutura do Projeto](#estrutura-do-projeto)
 5. [Endpoints da API](#endpoints-da-api)
 6. [Testes](#testes)
