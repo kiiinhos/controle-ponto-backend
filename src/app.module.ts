@@ -29,9 +29,10 @@ import { UserHistoryEntity } from './registers/entities/user-history.entity';
           UserHistoryEntity,
         ],
         synchronize: true,
-        ssl: configService.get<boolean>('DB_SSL')
-          ? { rejectUnauthorized: false }
-          : false,
+        ssl:
+          configService.get<string>('DB_SSL') === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
       inject: [ConfigService],
     }),
